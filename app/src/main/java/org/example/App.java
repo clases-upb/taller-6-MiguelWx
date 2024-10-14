@@ -3,15 +3,89 @@
  */
 package org.example;
 
-public class App {
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.Scanner;
 
+public class App {
+       static int [] VUno = new int[(int)(Math.random()*25)+1];
+        static String [] VDos = new String[(int)(Math.random()*10)];
+        static  String VnDos = "";
+        static int [][] VMAt = new int[5][5];
     public static void main(String[] args) {
         try {
+          
+
+
+            String resultado = menuVectores();
+            System.out.println(resultado);
+
+            String resultadoAleatorios = vectorNumerosAleatorios();
+            System.out.println(resultadoAleatorios);
+
+            llenarMatrizAleatoria();
+
+                System.out.println("Matriz Xs y Os:");
+                imprimirMatriz(matriz);
+
+       
+                contarXsOs();
+                System.out.println("\nResultado del conteo de Xs y Os en cada fila:");
+                imprimirConteo();
+
+            Temp(); 
+                int media = TempMedia();
+                System.out.println("Temperatura media "+TempMedia());
+                System.out.println("Temperatura debajo media"+TempDebajoMedia(media));
+                System.out.println("Temperatura sobre media"+TempSobreMedia(media));
+                System.out.println("Temperatura en media" + TempEnMedia(media));
+            
+            int[][] matrizGenerada = Matrizz9();
+                String matrizString = mostrarMatriz(matrizGenerada);
+                System.out.println("Matriz generada:");
+                System.out.println(matrizString);
+                int totalRepetidosFilas = contarRepetidosFilas(matrizGenerada);
+                int totalRepetidosColumnas = contarRepetidosColumnas(matrizGenerada);
+                System.out.println("\nTotal de números repetidos en las filas: " + totalRepetidosFilas);
+                System.out.println("Total de números repetidos en las columnas: " + totalRepetidosColumnas);
+
 
         } catch (Exception e) {
             // TODO: handle exception
         }
+
+      
+
     }
+
+    public static String[] RellenarVecStr()throws Exception{
+        try {
+            
+            for(int pos = 0;pos < VDos.length;pos++){
+                VnDos = "" + (int)(Math.random()*100);
+                VDos[pos] = VnDos;
+            }
+            return VDos;
+
+        } catch (Exception e) {
+            throw new Exception("RellenarVecint" + e);
+        }
+    }
+    
+    
+    public static int[] Temp()throws Exception{
+        try {
+            for(int pos = 0;pos < VUno.length;pos++){
+                VUno[pos] = (int)((Math.random()*25)+1);
+            }
+            return VUno;
+
+        } catch (Exception e) {
+            throw new Exception("RellenarVecint" + e);
+        }
+    }
+    
+    
 
     /*
      * 1. Implemente un programa en java donde inserte elementos en dos vectores
@@ -45,11 +119,395 @@ public class App {
      * elemento.
      */
 
+public static String menuVectores() throws Exception {
+        Scanner sc = new Scanner(System.in);
+        RellenarVecStr();  
+        Temp();  
+
+        String txt_return = "";
+        boolean salir = false;
+        while (!salir) {
+            System.out.println("\n---- Menú de operaciones con vectores ----");
+            System.out.println("1. Recorrer vector numérico");
+            System.out.println("2. Recorrer vector de cadenas");
+            System.out.println("3. Actualizar vector");
+            System.out.println("4. Añadir al vector");
+            System.out.println("5. Borrar elemento del vector");
+            System.out.println("6. Ordenar el vector");
+            System.out.println("7. Buscar en el vector");
+            System.out.println("8. Salir");
+            System.out.print("Seleccione una opción: ");
+            int opcion = sc.nextInt();
+
+            switch (opcion) {
+                case 1:
+                    txt_return += recorrerVector(VUno, true) + "\n";
+                    break;
+                case 2:
+                    txt_return += recorrerVector(VDos, true) + "\n";
+                    break;
+                case 3:
+                    txt_return += actualizarVector() + "\n";
+                    break;
+                case 4:
+                    txt_return += añadirElemento() + "\n";
+                    break;
+                case 5:
+                    txt_return += borrarElemento() + "\n";
+                    break;
+                case 6:
+                    txt_return += ordenarVector() + "\n";
+                    break;
+                case 7:
+                    txt_return += buscarElemento() + "\n";
+                    break;
+                case 8:
+                    salir = true;
+                    break;
+                default:
+                    txt_return += "Opción inválida.\n";
+            }
+        }
+        return txt_return;
+    }
+    public static String recorrerVector(int[] vector, boolean deInicioAFinal) throws Exception{
+        try {
+            String txt_return = "";
+        if (deInicioAFinal) {
+            txt_return += "Recorriendo de inicio a fin: ";
+            for (int i = 0; i < vector.length; i++) {
+                txt_return += vector[i] + " ";
+            }
+        } else {
+            txt_return += "Recorriendo de fin a inicio: ";
+            for (int i = vector.length - 1; i >= 0; i--) {
+                txt_return += vector[i] + " ";
+            }
+        }
+        return txt_return;
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+        
+    }
+
+    public static String recorrerVector(String[] vector, boolean deInicioAFinal) throws Exception{
+        try {
+            String txt_return = "";
+        if (deInicioAFinal) {
+            txt_return += "Recorriendo de inicio a fin: ";
+            for (int i = 0; i < vector.length; i++) {
+                txt_return += vector[i] + " ";
+            }
+        } else {
+            txt_return += "Recorriendo de fin a inicio: ";
+            for (int i = vector.length - 1; i >= 0; i--) {
+                txt_return += vector[i] + " ";
+            }
+        }
+        return txt_return;
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+        
+    }
+
+    public static String actualizarVector() throws Exception{
+        try {
+            Scanner sc = new Scanner(System.in);
+        String txt_return = "";
+
+        System.out.print("¿En qué vector desea actualizar? (1-Numérico, 2-Cadenas): ");
+        int tipoVector = sc.nextInt();
+
+        if (tipoVector == 1) {
+            System.out.print("Ingrese la posición a actualizar: ");
+            int pos = sc.nextInt();
+            System.out.print("Ingrese el nuevo valor: ");
+            int nuevoValor = sc.nextInt();
+            if (pos >= 0 && pos < VUno.length) {
+                VUno[pos] = nuevoValor;
+                txt_return += "Vector actualizado: ";
+                for (int i = 0; i < VUno.length; i++) {
+                    txt_return += VUno[i] + " ";
+                }
+            } else {
+                txt_return += "Posición fuera de rango.";
+            }
+        } else if (tipoVector == 2) {
+            System.out.print("Ingrese la posición a actualizar: ");
+            int pos = sc.nextInt();
+            System.out.print("Ingrese el nuevo valor: ");
+            String nuevoValor = sc.next();
+            if (pos >= 0 && pos < VDos.length) {
+                VDos[pos] = nuevoValor;
+                txt_return += "Vector actualizado: ";
+                for (int i = 0; i < VDos.length; i++) {
+                    txt_return += VDos[i] + " ";
+                }
+            } else {
+                txt_return += "Posición fuera de rango.";
+            }
+        }
+        return txt_return;
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+        
+    }
+
+   
+    public static String añadirElemento() throws Exception{
+        try {
+            Scanner sc = new Scanner(System.in);
+        String txt_return = "";
+
+        System.out.print("¿En qué vector desea añadir? (1-Numérico, 2-Cadenas): ");
+        int tipoVector = sc.nextInt();
+
+        if (tipoVector == 1) {
+            System.out.print("Ingrese el valor a añadir: ");
+            int nuevoValor = sc.nextInt();
+            int[] nuevoVUno = new int[VUno.length + 1];  
+            for (int i = 0; i < VUno.length; i++) {
+                nuevoVUno[i] = VUno[i];
+            }
+            nuevoVUno[VUno.length] = nuevoValor;  
+            VUno = nuevoVUno;
+            txt_return += "Vector actualizado: ";
+            for (int i = 0; i < VUno.length; i++) {
+                txt_return += VUno[i] + " ";
+            }
+        } else if (tipoVector == 2) {
+            System.out.print("Ingrese el valor a añadir: ");
+            String nuevoValor = sc.next();
+            String[] nuevoVDos = new String[VDos.length + 1];  
+            for (int i = 0; i < VDos.length; i++) {
+                nuevoVDos[i] = VDos[i];
+            }
+            nuevoVDos[VDos.length] = nuevoValor; 
+            VDos = nuevoVDos;
+            txt_return += "Vector actualizado: ";
+            for (int i = 0; i < VDos.length; i++) {
+                txt_return += VDos[i] + " ";
+            }
+        }
+        return txt_return;
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+        
+    }
+
+  
+    public static String borrarElemento() throws Exception{
+        try {
+             Scanner sc = new Scanner(System.in);
+        String txt_return = "";
+
+        System.out.print("¿En qué vector desea borrar? (1-Numérico, 2-Cadenas): ");
+        int tipoVector = sc.nextInt();
+
+        if (tipoVector == 1) {
+            System.out.print("Ingrese la posición a borrar: ");
+            int pos = sc.nextInt();
+            if (pos >= 0 && pos < VUno.length) {
+                int[] nuevoVUno = new int[VUno.length - 1];  
+                for (int i = 0, j = 0; i < VUno.length; i++) {
+                    if (i != pos) {
+                        nuevoVUno[j++] = VUno[i];
+                    }
+                }
+                VUno = nuevoVUno;
+                txt_return += "Vector actualizado: ";
+                for (int i = 0; i < VUno.length; i++) {
+                    txt_return += VUno[i] + " ";
+                }
+            } else {
+                txt_return += "Posición fuera de rango.";
+            }
+        } else if (tipoVector == 2) {
+            System.out.print("Ingrese la posición a borrar: ");
+            int pos = sc.nextInt();
+            if (pos >= 0 && pos < VDos.length) {
+                String[] nuevoVDos = new String[VDos.length - 1];  
+                for (int i = 0, j = 0; i < VDos.length; i++) {
+                    if (i != pos) {
+                        nuevoVDos[j++] = VDos[i];
+                    }
+                }
+                VDos = nuevoVDos;
+                txt_return += "Vector actualizado: ";
+                for (int i = 0; i < VDos.length; i++) {
+                    txt_return += VDos[i] + " ";
+                }
+            } else {
+                txt_return += "Posición fuera de rango.";
+            }
+        }
+        return txt_return;
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+       
+    }
+
+   
+    public static String ordenarVector() throws Exception{
+        try {
+            Scanner sc = new Scanner(System.in);
+        String txt_return = "";
+
+        System.out.print("¿Qué vector desea ordenar? (1-Numérico, 2-Cadenas): ");
+        int tipoVector = sc.nextInt();
+
+        if (tipoVector == 1) {
+            System.out.print("Ordenar (1-Ascendente, 2-Descendente): ");
+            int orden = sc.nextInt();
+            for (int i = 0; i < VUno.length - 1; i++) {
+                for (int j = i + 1; j < VUno.length; j++) {
+                    if ((orden == 1 && VUno[i] > VUno[j]) || (orden == 2 && VUno[i] < VUno[j])) {
+                        int temp = VUno[i];
+                        VUno[i] = VUno[j];
+                        VUno[j] = temp;
+                    }
+                }
+            }
+            txt_return += "Vector ordenado: ";
+            for (int i = 0; i < VUno.length; i++) {
+                txt_return += VUno[i] + " ";
+            }
+        } else if (tipoVector == 2) {
+            System.out.print("Ordenar (1-Ascendente, 2-Descendente): ");
+            int orden = sc.nextInt();
+            for (int i = 0; i < VDos.length - 1; i++) {
+                for (int j = i + 1; j < VDos.length; j++) {
+                    if ((orden == 1 && VDos[i].compareTo(VDos[j]) > 0) || (orden == 2 && VDos[i].compareTo(VDos[j]) < 0)) {
+                        String temp = VDos[i];
+                        VDos[i] = VDos[j];
+                        VDos[j] = temp;
+                    }
+                }
+            }
+            txt_return += "Vector ordenado: ";
+            for (int i = 0; i < VDos.length; i++) {
+                txt_return += VDos[i] + " ";
+            }
+        }
+        return txt_return;
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+        
+    }
+
+   
+    public static String buscarElemento() throws Exception{
+        try {
+            Scanner sc = new Scanner(System.in);
+        String txt_return = "";
+        System.out.print("¿En qué vector desea buscar? (1-Numérico, 2-Cadenas): ");
+        int tipoVector = sc.nextInt();
+
+        if (tipoVector == 1) {
+            System.out.print("Ingrese el valor a buscar: ");
+            int valor = sc.nextInt();
+            String posiciones = "";
+            for (int i = 0; i < VUno.length; i++) {
+                if (VUno[i] == valor) {
+                    posiciones += i + "-";
+                }
+            }
+            txt_return += "Posiciones: " + (posiciones.isEmpty() ? "No encontrado" : posiciones);
+        } else if (tipoVector == 2) {
+            System.out.print("Ingrese el valor a buscar: ");
+            String valor = sc.next();
+            String posiciones = "";
+            for (int i = 0; i < VDos.length; i++) {
+                if (VDos[i].equals(valor)) {
+                    posiciones += i + "-";
+                }
+            }
+            txt_return += "Posiciones: " + (posiciones.isEmpty() ? "No encontrado" : posiciones);
+        }
+        return txt_return;
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+        
+    }
+
     /*
      * 2. Escriba un algoritmo que calcule aleatoriamente N temperaturas, las lleve
      * a un vector y luego calcule su media, cuántas temperaturas están por encima
      * de la media y cuántas por debajo.
      */
+   
+    public static int TempMedia()throws Exception{
+        try {
+            int TempMed = 0;
+            
+            for(int pos = 0;pos < VUno.length;pos++){
+                TempMed += VUno[pos];
+            }
+
+            return (TempMed/VUno.length);
+
+        } catch (Exception e) {
+            throw new Exception("RellenarVecint" + e);
+        }
+    }
+    public static String TempDebajoMedia(int media)throws Exception{
+        try {
+            String TempDebajoMed = "";
+            
+            for(int pos = 0;pos < VUno.length;pos++){
+                if(media > VUno[pos]){
+                    TempDebajoMed+= " "+VUno[pos];
+                }
+            
+            }
+            
+            
+            return TempDebajoMed;
+
+        } catch (Exception e) {
+            throw new Exception("RellenarVecint" + e);
+        }
+    }
+    public static String TempSobreMedia(int media)throws Exception{
+        try {
+            String TempSobreMed = "";
+            
+            for(int pos = 0;pos < VUno.length;pos++){
+                if(media < VUno[pos]){
+                    TempSobreMed+=" "+ VUno[pos];
+                }
+                
+            }
+            return TempSobreMed;
+
+        } catch (Exception e) {
+            throw new Exception("RellenarVecint" + e);
+        }
+    }
+    public static String TempEnMedia(int media)throws Exception{
+        try {
+            String TempSobreMed = "";
+            
+            for(int pos = 0;pos < VUno.length;pos++){
+                if(media == VUno[pos]){
+                    TempSobreMed+=" "+ VUno[pos];
+                }
+                
+            }
+            return TempSobreMed;
+
+        } catch (Exception e) {
+            throw new Exception("RellenarVecint" + e);
+        }
+    }
+
 
     /*
      * 3. Cargue un vector a partir de un archivo de palabras, con mínimo 10
@@ -57,6 +515,28 @@ public class App {
      * 
      * Escriba el vector inicial sin ordenar, los vectores ordenados.
      */
+
+ public static String[] cargarVectorPalabras() throws Exception{
+    try {
+            
+    BufferedReader br = new BufferedReader(new FileReader("app\\src\\archivotxt.txt"));
+    String[] palabras = new String[10];
+    String linea;
+    int i = 0;
+    while ((linea = br.readLine()) != null && i < 10) {
+        palabras[i++] = linea;
+    }
+    br.close();
+    return palabras;
+    } catch (Exception e) {
+       throw new Exception("Ocurrio un error en cargarVectorPalabras \n" + e);
+    }
+   
+}
+
+
+
+
 
     /*
      * 4. Escriba un algoritmo que cree un vector de N elementos (el N es dado por
@@ -68,17 +548,150 @@ public class App {
      * posición quiere borrar y mostrará nuevamente el menú. En el menú aparecerá la
      * opción para terminar el programa.
      */
+    public static String vectorNumerosAleatorios() throws Exception {
+        try {
+            Scanner sc = new Scanner(System.in);
+        String txt_return = "";
+
+        System.out.print("Ingrese el tamaño del vector: ");
+        int N = sc.nextInt();
+        short[] vector = new short[N];
+
+      
+        for (int i = 0; i < N; i++) {
+            vector[i] = (short) (Math.random() * 100 + 1);  
+        }
+
+        boolean salir = false;
+        while (!salir) {
+            txt_return += "Vector actual: ";
+            for (short num : vector) {
+                txt_return += num + " ";
+            }
+            txt_return += "\n";
+
+            System.out.print("Ingrese la posición que desea eliminar (o -1 para terminar): ");
+            int pos = sc.nextInt();
+            if (pos == -1) {
+                salir = true;
+                break;
+            }
+            if (pos < 0 || pos >= N) {
+                txt_return += "Posición inválida.\n";
+                continue;
+            }
+
+            System.out.print("¿Dejar la casilla en 0 o desplazar elementos (1-0, 2-Desplazar)?: ");
+            int opcion = sc.nextInt();
+            if (opcion == 1) {
+                vector[pos] = 0;
+                txt_return += "Elemento en la posición " + pos + " establecido en 0.\n";
+            } else if (opcion == 2) {
+                for (int i = pos; i < N - 1; i++) {
+                    vector[i] = vector[i + 1];
+                }
+                vector[N - 1] = 0;  
+                txt_return += "Elemento en la posición " + pos + " desplazado.\n";
+            }
+        }
+        return txt_return;
+        } catch (Exception e) {
+           throw new Exception(e);
+        }
+        
+    }
 
     /*
      * 5. Escriba un algoritmo para convertir un número decimal en un número
      * hexadecimal, apoyado en vectores.
      */
-
+    public static String convertirDecimalAHexadecimal(int decimal) throws Exception{
+        try {
+             String hex = "";
+        while (decimal > 0) {
+            int resto = decimal % 16;
+            if (resto < 10) {
+                hex = resto + hex;
+            } else {
+                hex = (char) ('A' + resto - 10) + hex;
+            }
+            decimal /= 16;
+        }
+        return hex;
+        } catch (Exception e) {
+           throw new Exception(e);
+        }
+       
+    }
     /*
      * 6. Escriba un algoritmo que solicite al usuario el orden de una matriz
      * cuadrática, implemente su matriz transpuesta (investiga qué es) y la imprima.
      */
 
+    public static int[][] generarMatrizCuadrada(int orden) throws Exception{
+        try {
+            int[][] matriz = new int[orden][orden];
+        for (int i = 0; i < orden; i++) {
+            for (int j = 0; j < orden; j++) {
+                matriz[i][j] = (int) (Math.random() * 100 + 1);
+            }
+        }
+        return matriz;
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+        
+    }
+
+    public static int[][] transponerMatriz(int[][] matriz) throws Exception{
+        try {
+            int orden = matriz.length;
+        int[][] transpuesta = new int[orden][orden];
+        for (int i = 0; i < orden; i++) {
+            for (int j = 0; j < orden; j++) {
+                transpuesta[j][i] = matriz[i][j];
+            }
+        }
+        return transpuesta;
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+        
+    }
+    public static String matriztrans_origi(int orden) throws Exception{
+        try {
+            int[][] matriz = new int[orden][orden];  
+        String txt_return = "";  
+    
+        for (int i = 0; i < orden; i++) {
+            for (int j = 0; j < orden; j++) {
+                matriz[i][j] = (int) (Math.random() * 91) + 10; 
+            }
+        }
+    
+        txt_return += "Matriz Original:\n";
+        for (int i = 0; i < orden; i++) {
+            for (int j = 0; j < orden; j++) {
+                txt_return += matriz[i][j] + " ";  
+            }
+            txt_return += "\n";  
+        }
+    
+        
+        txt_return += "Matriz Transpuesta:\n";
+        for (int j = 0; j < orden; j++) {
+            for (int i = 0; i < orden; i++) {
+                txt_return += matriz[i][j] + " ";  
+            }
+            txt_return += "\n";  
+        }
+    
+        return txt_return; 
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+        
+    }
     /*
      * 7. Escriba un algoritmo que calcule el producto y la división. Los operandos
      * serán la suma de elementos de la diagonal principal y la suma de los
@@ -86,6 +699,55 @@ public class App {
      * llenados usando la función random para calcular números aleatorios entre 10 y
      * 100.
      */
+    public static int sumaDiagonalPrincipal(int[][] matriz) throws Exception{
+        try {
+            int suma = 0;
+        for (int i = 0; i < matriz.length; i++) {
+            suma += matriz[i][i];
+        }
+        return suma;
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+        
+    }
+
+    public static int sumaDiagonalSecundaria(int[][] matriz) throws Exception{
+        try {
+            int suma = 0;
+        for (int i = 0; i < matriz.length; i++) {
+            suma += matriz[i][matriz.length - 1 - i];
+        }
+        return suma;
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+        
+    }
+
+    public static int productoDiagonales(int[][] matriz) throws Exception{
+        try {
+        return sumaDiagonalPrincipal(matriz) * sumaDiagonalSecundaria(matriz);
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+       
+    }
+
+    public static int divisionDiagonales(int[][] matriz) throws Exception{
+        try {
+            int diagonalPrincipal = sumaDiagonalPrincipal(matriz);
+        int diagonalSecundaria = sumaDiagonalSecundaria(matriz);
+        if (diagonalSecundaria != 0) {
+            return diagonalPrincipal / diagonalSecundaria;
+        } else {
+            return 0;  
+        }
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+        
+    }
 
     /*
      * 8. Escriba un algoritmo que llene de manera aleatoria una matriz de 100 filas
@@ -93,11 +755,140 @@ public class App {
      * en cada fila. Imprima la matriz antes de llenarla, luego de llenarla y el
      * vector con el resultado.
      */
+    static char[][] matriz = new char[100][3]; 
+    static int[][] contadorFilas = new int[100][2];
+
+     public static void llenarMatrizAleatoria() throws Exception{
+        try {
+            for (int fila = 0; fila < matriz.length; fila++) {
+            for (int col = 0; col < matriz[fila].length; col++) {
+                if (Math.random() < 0.5) {
+                    matriz[fila][col] = 'X';
+                } else {
+                    matriz[fila][col] = 'O';
+                }
+            }
+        }
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+        
+    }
+    public static void imprimirMatriz(char[][] matriz) throws Exception{
+        try {
+            for (int fila = 0; fila < matriz.length; fila++) {
+            for (int col = 0; col < matriz[fila].length; col++) {
+                System.out.print(matriz[fila][col] + " ");
+            }
+            System.out.println();
+        }
+        } catch (Exception e) {
+           throw new Exception(e);
+        }
+    }
+    public static void contarXsOs() throws Exception{
+        try {
+            for (int fila = 0; fila < matriz.length; fila++) {
+            int conteoX = 0;
+            int conteoO = 0;
+            for (int col = 0; col < matriz[fila].length; col++) {
+                if (matriz[fila][col] == 'X') {
+                    conteoX++;
+                } else if (matriz[fila][col] == 'O') {
+                    conteoO++;
+                }
+            }
+            contadorFilas[fila][0] = conteoX; 
+            contadorFilas[fila][1] = conteoO; 
+        }
+        } catch (Exception e) {
+        throw new Exception(e);
+        }
+        
+    }
+
+    public static void imprimirConteo() {
+        for (int fila = 0; fila < contadorFilas.length; fila++) {
+            System.out.println("Fila " + (fila + 1) + ": Xs = " + contadorFilas[fila][0] + ", Os = " + contadorFilas[fila][1]);
+        }
+    }
+
+
 
     /*
      * 9. Llene una matriz de 5x5 con números aleatorios entre 1 y 9. En un vector
      * adicional, calcule la cantidad de números repetidos por cada fila y en otro
      * vector la cantidad de números repetidos de cada columna.
      */
+    public static int[][] Matrizz9()throws Exception{
+        try {
+        
+            for(int fil = 0;fil < VMAt.length;fil++){
+                
+                for(int col = 0; col <VMAt.length; col++){
+                    VMAt[fil][col] = (int)(Math.random()*(9-1))+1;
+                }
+            }
+            return VMAt;
 
+        } catch (Exception e) {
+            throw new Exception("Matrizz9" + e);
+        }
+    }
+    public static String mostrarMatriz(int[][] matriz) {
+        String resultado = "";
+        for (int fil = 0; fil < matriz.length; fil++) {
+            for (int col = 0; col < matriz[fil].length; col++) {
+                resultado += matriz[fil][col] + " ";
+            }
+            resultado += "\n";
+        }
+        return resultado;
+    }
+
+    
+    public static int contarRepetidosFilas(int[][] matriz) throws Exception{
+        try {
+             int totalRepetidos = 0;
+        for (int fil = 0; fil < matriz.length; fil++) {
+            int[] contador = new int[10]; 
+            for (int col = 0; col < matriz[fil].length; col++) {
+                contador[matriz[fil][col]]++;
+            }
+            // Contar cuántos números se repiten en la fila
+            for (int i = 1; i <= 9; i++) {
+                if (contador[i] > 1) {
+                    totalRepetidos += (contador[i] - 1);
+                }
+            }
+        }
+        return totalRepetidos;
+        } catch (Exception e) {
+           throw new Exception(e);
+        }
+       
+    }
+
+    
+    public static int contarRepetidosColumnas(int[][] matriz) throws Exception{
+        try {
+             int totalRepetidos = 0;
+        for (int col = 0; col < matriz.length; col++) {
+            int[] contador = new int[10]; 
+            for (int fil = 0; fil < matriz.length; fil++) {
+                contador[matriz[fil][col]]++;
+            }
+            
+            for (int i = 1; i <= 9; i++) {
+                if (contador[i] > 1) {
+                    totalRepetidos += (contador[i] - 1);
+                }
+            }
+        }
+        return totalRepetidos;
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+       
+    }
 }
